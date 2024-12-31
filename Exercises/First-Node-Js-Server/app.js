@@ -1,15 +1,26 @@
 // Add the http module
-const http = require("http");
+const http = require('http');
+// Add the fs module
+const fs = require('fs');
 
 // Create a server that takes in a request and a response
 const server = http.createServer((req, res) => {
-  console.log(req.url, req.method, req.headers);
-  res.setHeader("Content-Type", "text/html");
-  res.write("<html>");
-  res.write("<head><title>My First Page</title></head>");
-  res.write("<body><h1>Hello from my Node Server!</h1></body>");
-  res.write("</html>");
-  res.end();
+  if (req.url === '/') {
+    res.write('<html>');
+    res.write('<head><title>My First Page</title></head>');
+    res.write(
+      "<body><form action='/message' method='POST'><input type='text' name='message'><button type='submit'>Send</button></form></body>"
+    );
+    res.write('</html>');
+    return res.end();
+  }
+
+  if (req.url === '/message' && req.method === 'POST') {
+    fs.writeFileSync('message.txt', 'DUMMY');
+    res.statusCode = 302;
+    res.setHeader('Location', '/');
+    return res.end();
+  }
 });
 
 //Listen to port 3000
