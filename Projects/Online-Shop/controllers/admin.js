@@ -7,18 +7,18 @@ exports.getAddProduct = (req, res, next) => {
 	});
 };
 
+exports.getAdminProducts = (req, res, next) => {
+	Product.fetchAll((products) => {
+		res.render('admin/products', {
+			prods: products,
+			pageTitle: 'Admin Products',
+			path: '/admin/products',
+		}); //Arguments are passing dymanic data
+	});
+};
+
 exports.postAddProduct = (req, res, next) => {
 	const product = new Product(req.body.title);
 	product.save();
 	res.redirect('/');
-};
-
-exports.getProducts = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render('shop/product-list', {
-			prods: products,
-			pageTitle: 'Shop',
-			path: '/',
-		}); //Arguments are passing dymanic data
-	});
 };
