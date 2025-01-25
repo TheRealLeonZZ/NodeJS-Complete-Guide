@@ -1,26 +1,36 @@
 const Product = require('../models/product');
 
 exports.getIndex = (req, res, next) => {
-	res.render('shop/index', {
-		pageTitle: 'Shop',
-		path: '/',
+	Product.fetchAll((products) => {
+		res.render('shop/index', {
+			prods: products,
+			pageTitle: 'Shop',
+			path: '/',
+		});
 	});
 };
 
 exports.getProducts = (req, res, next) => {
 	Product.fetchAll((products) => {
-		res.render('shop/product-list', {
+		res.render('shop/products', {
 			prods: products,
 			pageTitle: 'Shop',
-			path: '/product-list',
+			path: '/products',
 		}); //Arguments are passing dymanic data
 	});
 };
 
 exports.getCart = (req, res, next) => {
 	res.render('shop/cart', {
-		pageTitle: 'Cart',
+		pageTitle: 'Your Cart',
 		path: '/cart',
+	});
+};
+
+exports.getOrders = (req, res, next) => {
+	res.render('shop/orders', {
+		pageTitle: 'Your Orders',
+		path: '/orders',
 	});
 };
 

@@ -7,16 +7,6 @@ exports.getAddProduct = (req, res, next) => {
 	});
 };
 
-exports.getAdminProducts = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render('admin/products', {
-			prods: products,
-			pageTitle: 'Admin Products',
-			path: '/admin/products',
-		}); //Arguments are passing dymanic data
-	});
-};
-
 exports.postAddProduct = (req, res, next) => {
 	const title = req.body.title;
 	const imageUrl = req.body.imageUrl;
@@ -25,4 +15,21 @@ exports.postAddProduct = (req, res, next) => {
 	const product = new Product(title, imageUrl, description, price);
 	product.save();
 	res.redirect('/');
+};
+
+exports.getAdminProducts = (req, res, next) => {
+	Product.fetchAll((products) => {
+		res.render('admin/products', {
+			prods: products,
+			pageTitle: 'Admin Products',
+			path: '/admin/products',
+		}); //Arguments are passing dynamic data
+	});
+};
+
+exports.getEditProduct = (req, res, next) => {
+	res.render('admin/edit-product', {
+		pageTitle: 'Edit Product',
+		path: '/admin/edit-product',
+	});
 };
