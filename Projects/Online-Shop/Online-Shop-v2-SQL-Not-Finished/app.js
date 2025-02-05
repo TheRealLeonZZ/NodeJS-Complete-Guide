@@ -19,6 +19,15 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false })); //parser for form data
 app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to this folder
 
+app.use((req, res, next) => {
+	User.findByPk(1)
+		.then((user) => {
+			req.user = user; //Add user sequelize object to request
+			next();
+		})
+		.catch((err) => console.log(err));
+});
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
@@ -28,9 +37,19 @@ Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
 
 sequelize
-	.sync({ force: true })
+	// .sync({ force: true })
+	.sync()
 	.then((result) => {
 		// console.log(result);
+		return User.findByPk(1);
+	})
+	.then((user) => {
+		if (!user) {
+			return User.create({ name: 'Leon', email: 'leon@example.com' });
+		}
+		return user;
+	})
+	.then((user) => {
 		app.listen(3000);
 	})
 	.catch((err) => console.log(err));
