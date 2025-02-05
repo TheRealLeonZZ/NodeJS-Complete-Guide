@@ -44,7 +44,7 @@ exports.getCart = (req, res, next) => {
 		.then((cart) => {
 			return cart
 				.getProducts()
-				.then((products) => {
+				.then((cartProducts) => {
 					res.render('shop/cart', {
 						pageTitle: 'Your Cart',
 						path: '/cart',
