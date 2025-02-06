@@ -142,9 +142,9 @@ exports.postOrder = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 
-exports.getCheckout = (req, res, next) => {
-	res.render('shop/checkout', {
-		pageTitle: 'Checkout',
-		path: '/checkout',
-	});
-};
+// exports.getCheckout = (req, res, next) => {
+// 	res.render('shop/checkout', {
+// 		pageTitle: 'Checkout',
+// 		path: '/checkout',
+// 	});
+// };
