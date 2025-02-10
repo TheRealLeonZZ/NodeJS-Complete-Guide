@@ -1,7 +1,16 @@
 const Product = require('../models/product');
-const mongodb = require('mongodb');
 
-const ObjectId = mongodb.ObjectId;
+exports.getAdminProducts = (req, res, next) => {
+	Product.fetchAll()
+		.then((products) => {
+			res.render('admin/products', {
+				prods: products,
+				pageTitle: 'Admin Products',
+				path: '/admin/products',
+			}); //Arguments are passing dynamic data
+		})
+		.catch((err) => console.log(err));
+};
 
 exports.getAddProduct = (req, res, next) => {
 	res.render('admin/edit-product', {
@@ -58,7 +67,7 @@ exports.postEditProduct = (req, res, next) => {
 		updatedPrice,
 		updatedDescription,
 		updatedImageUrl,
-		new ObjectId(prodId)
+		prodId
 	);
 	return product
 		.save()
@@ -69,27 +78,12 @@ exports.postEditProduct = (req, res, next) => {
 		.catch((err) => console.log(err));
 };
 
-// exports.postDeleteProduct = (req, res, next) => {
-// 	const prodId = req.body.productId;
-// 	Product.findByPk(prodId)
-// 		.then((product) => {
-// 			return product.destroy();
-// 		})
-// 		.then((result) => {
-// 			console.log('DELETED PRODUCT');
-// 			res.redirect('/admin/products');
-// 		})
-// 		.catch((err) => console.log(err));
-// };
-
-exports.getAdminProducts = (req, res, next) => {
-	Product.fetchAll()
-		.then((products) => {
-			res.render('admin/products', {
-				prods: products,
-				pageTitle: 'Admin Products',
-				path: '/admin/products',
-			}); //Arguments are passing dynamic data
+exports.postDeleteProduct = (req, res, next) => {
+	const prodId = req.body.productId;
+	Product.deleteById(prodId)
+		.then(() => {
+			console.log('DELETED PRODUCT');
+			res.redirect('/admin/products');
 		})
 		.catch((err) => console.log(err));
 };
