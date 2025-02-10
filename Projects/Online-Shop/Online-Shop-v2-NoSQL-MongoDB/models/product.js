@@ -8,7 +8,7 @@ class Product {
 		this.price = price;
 		this.description = description;
 		this.imageUrl = imageUrl;
-		this._id = new mongodb.ObjectId(id); //If I create a new one, dont pass this. If I want to edit, I will use this to check.
+		this._id = id ? new mongodb.ObjectId(id) : null; //If I create a new one, dont pass this. If I want to edit, I will use this to check.
 	}
 
 	save() {
