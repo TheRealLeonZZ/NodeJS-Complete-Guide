@@ -1,4 +1,7 @@
 const Product = require('../models/product');
+const mongodb = require('mongodb');
+
+const ObjectId = mongodb.ObjectId;
 
 exports.getAddProduct = (req, res, next) => {
 	res.render('admin/edit-product', {
@@ -47,17 +50,18 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
 	const prodId = req.body.productId;
 	const updatedTitle = req.body.title;
-	const updatedImageUrl = req.body.imageUrl;
-	const updatedDescription = req.body.description;
 	const updatedPrice = req.body.price;
-	Product.findByPk(prodId)
-		.then((product) => {
-			product.title = updatedTitle;
-			product.imageUrl = updatedImageUrl;
-			product.description = updatedDescription;
-			product.price = updatedPrice;
-			return product.save();
-		})
+	const updatedDescription = req.body.description;
+	const updatedImageUrl = req.body.imageUrl;
+	const product = new Product(
+		updatedTitle,
+		updatedPrice,
+		updatedDescription,
+		updatedImageUrl,
+		new ObjectId(prodId)
+	);
+	return product
+		.save()
 		.then((result) => {
 			console.log('UPDATED PRODUCT');
 			res.redirect('/admin/products');
