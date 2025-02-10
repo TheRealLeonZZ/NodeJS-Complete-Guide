@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to 
 app.use((req, res, next) => {
 	User.findById('67aa22eb2894cac4a70f8c3d')
 		.then((user) => {
-			req.user = user; //Add user sequelize object to request
+			req.user = new User(user.username, user.email, user.cart, user._id); //Add user
 			next();
 		})
 		.catch((err) => console.log(err));
