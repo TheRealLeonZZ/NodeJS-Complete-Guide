@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const User = require('../models/user');
 
 exports.getIndex = (req, res, next) => {
 	Product.fetchAll()
@@ -40,17 +41,12 @@ exports.getProduct = (req, res, next) => {
 exports.getCart = (req, res, next) => {
 	req.user
 		.getCart()
-		.then((cart) => {
-			return cart
-				.getProducts()
-				.then((cartProducts) => {
-					res.render('shop/cart', {
-						pageTitle: 'Your Cart',
-						path: '/cart',
-						products: cartProducts,
-					});
-				})
-				.catch((err) => console.log(err));
+		.then((cartProducts) => {
+			res.render('shop/cart', {
+				pageTitle: 'Your Cart',
+				path: '/cart',
+				products: cartProducts,
+			});
 		})
 		.catch((err) => console.log(err));
 };
@@ -62,7 +58,7 @@ exports.postCart = (req, res, next) => {
 			return req.user
 				.addToCart(product)
 				.then((result) => {
-					// res.redirect('/cart');
+					res.redirect('/cart');
 				})
 				.catch((err) => console.log(err));
 		})
