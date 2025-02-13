@@ -104,7 +104,7 @@ class User {
 				const order = {
 					items: products,
 					user: {
-						_id: this._id,
+						_id: new mongodb.ObjectId(this._id),
 					},
 				};
 				return db.collection('orders').insertOne(order);
@@ -128,10 +128,13 @@ class User {
 			.catch((err) => console.log(err));
 	}
 
-	// getOrders() {
-	// 	const db = getDb();
-
-	// }
+	getOrders() {
+		const db = getDb();
+		return db
+			.collection('orders')
+			.find({ 'user._id': new mongodb.ObjectId(this._id) })
+			.toArray();
+	}
 
 	static findById(userId) {
 		const db = getDb();
