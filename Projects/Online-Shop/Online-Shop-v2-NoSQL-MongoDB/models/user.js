@@ -25,7 +25,6 @@ class User {
 		});
 		let newQuantity = 1;
 		const updatedCartItems = [...this.cart.items];
-
 		if (cartProductIndex >= 0) {
 			newQuantity = this.cart.items[cartProductIndex].quantity + 1;
 			updatedCartItems[cartProductIndex].quantity = newQuantity;
@@ -35,11 +34,9 @@ class User {
 				quantity: newQuantity,
 			});
 		}
-
 		const updatedCart = {
 			items: updatedCartItems,
 		};
-
 		const db = getDb();
 		return db
 			.collection('users')
@@ -53,6 +50,22 @@ class User {
 			)
 			.then()
 			.catch((err) => console.log(err));
+
+		// INCASE USER IS BROKEN, COMMENT TILL HERE AND UNCOMMENT FROM HERE
+		// const updatedCart = { items: [{ ...product, quantity: 1 }] };
+		// const db = getDb();
+		// return db
+		// 	.collection('users')
+		// 	.updateOne(
+		// 		{
+		// 			_id: new mongodb.ObjectId(this._id),
+		// 		},
+		// 		{
+		// 			$set: { cart: updatedCart },
+		// 		}
+		// 	)
+		// 	.then()
+		// 	.catch((err) => console.log(err));
 	}
 
 	getCart() {
