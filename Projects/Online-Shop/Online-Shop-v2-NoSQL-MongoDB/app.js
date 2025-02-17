@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const errorController = require('./controllers/error');
 
-// const User = require('./models/user');
+const User = require('./models/user');
 
 const app = express();
 
@@ -19,14 +19,14 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false })); //parser for form data
 app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to this folder
 
-// app.use((req, res, next) => {
-// 	User.findById('67aa22eb2894cac4a70f8c3d')
-// 		.then((user) => {
-// 			req.user = new User(user.username, user.email, user.cart, user._id); //Add user
-// 			next();
-// 		})
-// 		.catch((err) => console.log(err));
-// });
+app.use((req, res, next) => {
+	User.findById('67b396c353e63982747a92ef')
+		.then((user) => {
+			req.user = user; //Add user to request
+			next();
+		})
+		.catch((err) => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -38,6 +38,18 @@ mongoose
 		'mongodb+srv://leoneli61:ldNEYiVZi5IUOP6Q@cluster0.5anly.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0'
 	)
 	.then(() => {
+		User.findOne() //Without arguments finds the first user.
+			.then((user) => {
+				if (!user) {
+					const user = new User({
+						username: 'leoneli61',
+						email: 'leon@example.com',
+						cart: { items: [] },
+					});
+					user.save();
+				}
+			})
+			.catch((err) => console.log(err));
 		app.listen(3000);
 	})
 	.catch((err) => console.log(err));
