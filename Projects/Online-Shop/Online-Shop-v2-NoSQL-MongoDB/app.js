@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 const errorController = require('./controllers/error');
 
@@ -19,6 +20,9 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false })); //parser for form data
 app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to this folder
+app.use(
+	session({ secret: 'my secret', resave: false, saveUninitialized: false })
+);
 
 app.use((req, res, next) => {
 	User.findById('67b396c353e63982747a92ef')
