@@ -37,14 +37,14 @@ app.use(
 	})
 );
 
-app.use((req, res, next) => {
-	User.findById('67b396c353e63982747a92ef')
-		.then((user) => {
-			req.user = user; //Add user to request
-			next();
-		})
-		.catch((err) => console.log(err));
-});
+// app.use((req, res, next) => {
+// 	User.findById('67b396c353e63982747a92ef')
+// 		.then((user) => {
+// 			req.user = user; //Add user to request
+// 			next();
+// 		})
+// 		.catch((err) => console.log(err));
+// });
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
