@@ -58,18 +58,6 @@ app.use(errorController.get404);
 mongoose
 	.connect(MONGODB_URI)
 	.then(() => {
-		User.findOne() //Without arguments finds the first user.
-			.then((user) => {
-				if (!user) {
-					const user = new User({
-						username: 'leoneli61',
-						email: 'leon@example.com',
-						cart: { items: [] },
-					});
-					user.save();
-				}
-			})
-			.catch((err) => console.log(err));
 		app.listen(3000);
 	})
 	.catch((err) => console.log(err));
