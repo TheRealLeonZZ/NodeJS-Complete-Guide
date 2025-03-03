@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const errorController = require('./controllers/error');
 
@@ -30,6 +31,7 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false })); //parser for form data
 app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to this folder
+//initialize session
 app.use(
 	session({
 		secret: 'my secret',
@@ -39,6 +41,7 @@ app.use(
 	})
 );
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
 	if (!req.session.user) {
