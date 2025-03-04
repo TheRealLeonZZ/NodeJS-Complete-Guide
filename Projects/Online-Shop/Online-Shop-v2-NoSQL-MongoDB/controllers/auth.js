@@ -1,6 +1,16 @@
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 
 const User = require('../models/user');
+
+const transporter = nodemailer.createTransport({
+	host: 'app.debugmail.io',
+	port: 25,
+	auth: {
+		user: 'user@example.org',
+		pass: '"34802cae-c6bc-4f4c-a41c-3f6ec9c56867"',
+	},
+});
 
 exports.getLogin = (req, res, next) => {
 	let message = req.flash('error');
@@ -83,9 +93,17 @@ exports.postSignup = (req, res, next) => {
 				})
 				.then(() => {
 					res.redirect('/login');
+					return transporter.sendMail({
+						to: email,
+						from: 'Service@ZZTeam.com',
+						subject: 'Signup succeeded!',
+						html: '<h1>You successfully signed up!</h1>',
+					});
+				})
+				.catch((err) => {
+					console.log(err);
 				});
 		})
-
 		.catch((err) => console.log(err));
 };
 
