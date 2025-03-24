@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
@@ -7,8 +9,8 @@ const transporter = nodemailer.createTransport({
 	host: 'sandbox.smtp.mailtrap.io',
 	port: 2525,
 	auth: {
-		user: '563573926628c4',
-		pass: '56f1f67943e03f',
+		user: process.env.MAILTRAP_USER,
+		pass: process.env.MAILTRAP_PASS,
 	},
 });
 

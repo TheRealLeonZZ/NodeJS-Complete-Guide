@@ -1,3 +1,4 @@
 Exercises/First-Express-Js-Server/*/node_modules/*
 Exercises/First-Node-Js-Server/node_modules/*
 Projects/*/*/node_modules/*
+Projects/*/*/.env

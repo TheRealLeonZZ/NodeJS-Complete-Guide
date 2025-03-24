@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require('path');
 
 const express = require('express');
@@ -12,12 +14,9 @@ const errorController = require('./controllers/error');
 
 const User = require('./models/user');
 
-MONGODB_URI =
-	'mongodb+srv://leoneli61:ldNEYiVZi5IUOP6Q@cluster0.5anly.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0';
-
 const app = express();
 const store = new MongoDBStore({
-	uri: MONGODB_URI,
+	uri: process.env.MONGO_URI,
 	collection: 'sessions',
 });
 const csrfProtection = csrf();
@@ -69,7 +68,7 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoose
-	.connect(MONGODB_URI)
+	.connect(process.env.MONGO_URI)
 	.then(() => {
 		app.listen(3000);
 	})
