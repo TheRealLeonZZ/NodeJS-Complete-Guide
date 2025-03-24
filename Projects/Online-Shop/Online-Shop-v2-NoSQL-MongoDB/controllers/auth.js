@@ -4,11 +4,11 @@ const nodemailer = require('nodemailer');
 const User = require('../models/user');
 
 const transporter = nodemailer.createTransport({
-	host: 'app.debugmail.io',
-	port: 25,
+	host: 'sandbox.smtp.mailtrap.io',
+	port: 2525,
 	auth: {
-		user: 'user@example.org',
-		pass: '"34802cae-c6bc-4f4c-a41c-3f6ec9c56867"',
+		user: '563573926628c4',
+		pass: '56f1f67943e03f',
 	},
 });
 
