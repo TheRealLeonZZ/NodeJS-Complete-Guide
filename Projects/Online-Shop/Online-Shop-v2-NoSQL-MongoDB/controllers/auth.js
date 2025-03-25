@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 
@@ -127,5 +128,39 @@ exports.getReset = (req, res, next) => {
 		path: '/reset',
 		pageTitle: 'Reset Password',
 		errorMessage: message,
+	});
+};
+
+exports.postReset = (req, res, next) => {
+	crypto.randomBytes(32, (err, buffer) => {
+		if (err) {
+			console.log(err);
+			return res.redirect('/reset');
+		}
+		const token = buffer.toString('hex');
+		User.findOne({ email: req.body.email })
+			.then((user) => {
+				if (!user) {
+					req.flash('error', 'No account with that email found.');
+					res.redirect('/reset');
+					return Promise.reject('No account found');
+				}
+				user.resetToken = token;
+				user.resetTokenExpiration = Date.now() + 3600000;
+				return user.save();
+			})
+			.then(() => {
+				res.redirect('/');
+				transporter.sendMail({
+					to: req.body.email,
+					from: 'Service@ZZTeam.com',
+					subject: 'Password Reset',
+					html: `
+					<p>You requested a password reset</p>
+					<p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+					`,
+				});
+			})
+			.catch((err) => console.log(err));
 	});
 };
