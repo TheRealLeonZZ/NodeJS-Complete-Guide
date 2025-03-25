@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 
 exports.getAdminProducts = (req, res, next) => {
-	Product.find()
+	Product.find({ userId: req.user._id }) // Find products owned by the user
 		// .select('title price -_id') //Select only title and price and exclude _id
 		// .populate('userId', 'username') //Populate user id and username instead getting just id
 		.then((products) => {
