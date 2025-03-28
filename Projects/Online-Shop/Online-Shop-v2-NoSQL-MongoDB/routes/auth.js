@@ -23,7 +23,7 @@ router.post(
 			.custom((value, { req }) => {
 				return User.findOne({ email: req.body.email }).then((user) => {
 					if (!user) {
-						return Promise.reject('Invalid email or password.!');
+						return Promise.reject('Invalid email or password.');
 					}
 				});
 			}),
