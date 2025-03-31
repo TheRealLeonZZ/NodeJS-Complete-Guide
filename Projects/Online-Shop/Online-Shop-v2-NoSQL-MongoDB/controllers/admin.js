@@ -13,7 +13,11 @@ exports.getAdminProducts = (req, res, next) => {
 				path: '/admin/products',
 			}); //Arguments are passing dynamic data
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error); // Pass the error to the next middleware
+		});
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -77,7 +81,10 @@ exports.postAddProduct = (req, res, next) => {
 			// 	errorMessage: 'Database operation failed, please try again.',
 			// 	validationErrors: [],
 			// });
-			res.redirect('/500'); // Redirect to a custom error page
+			// res.redirect('/500'); // Redirect to a custom error page
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error); // Pass the error to the next middleware
 		});
 };
 
