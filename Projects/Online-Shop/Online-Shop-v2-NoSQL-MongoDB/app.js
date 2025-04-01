@@ -31,6 +31,17 @@ const fileStorage = multer.diskStorage({
 	},
 });
 
+const fileFilter = (req, file, cb) => {
+	if (
+		file.mimetype === 'image/png' ||
+		file.mimetype === 'image/jpg' ||
+		file.mimetype === 'image/jpeg'
+	) {
+		cb(null, true); //Accept the file
+	}
+	cb(null, false); //Reject the file
+};
+
 app.set('view engine', 'ejs'); //Which view engine to use
 app.set('views', 'views'); //Where to look for views
 
@@ -39,7 +50,9 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false })); //parser for form data
-app.use(multer({ storage: fileStorage }).single('image')); //parser for form data
+app.use(
+	multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+); //parser for form data
 app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to this folder
 //initialize session
 app.use(
