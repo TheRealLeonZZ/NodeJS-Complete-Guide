@@ -26,7 +26,7 @@ const fileStorage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, 'images'); //Where to store the file
 	},
-	filename: (req, fike, cb) => {
+	filename: (req, file, cb) => {
 		cb(null, new Date().toISOString() + '-' + file.originalname); //File name
 	},
 });
