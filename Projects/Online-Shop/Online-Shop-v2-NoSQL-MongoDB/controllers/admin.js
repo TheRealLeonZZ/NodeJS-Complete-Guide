@@ -1,5 +1,7 @@
 const { validationResult } = require('express-validator'); // Importing validationResult from express-validator
 
+const fileHelper = require('../util/file'); // Importing file helper for file operations
+
 const Product = require('../models/product');
 
 exports.getAdminProducts = (req, res, next) => {
@@ -163,6 +165,9 @@ exports.postEditProduct = (req, res, next) => {
 			product.price = updatedPrice;
 			product.description = updatedDescription;
 			if (updatedImage) {
+				// If a new image is uploaded, delete the old one
+				fileHelper.deleteFile(product.imageUrl); // Delete the old image file
+				// Set the new image URL
 				product.imageUrl = '/' + updatedImage.path; // Use the path of the uploaded file
 			}
 			return product.save().then((result) => {
@@ -179,7 +184,14 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
 	const prodId = req.body.productId;
-	Product.deleteOne({ _id: prodId, userId: req.user._id })
+	Product.findById(prodId)
+		.then((product) => {
+			if (!product) {
+				return next(new Error('Product not found.'));
+			}
+			fileHelper.deleteFile(product.imageUrl); // Delete the old image file
+			return Product.deleteOne({ _id: prodId, userId: req.user._id });
+		})
 		.then(() => {
 			console.log('DELETED PRODUCT');
 			res.redirect('/admin/products');
