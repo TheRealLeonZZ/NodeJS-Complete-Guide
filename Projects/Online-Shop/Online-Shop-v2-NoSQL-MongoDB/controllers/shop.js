@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const PDFDocument = require('pdfkit');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 
@@ -165,6 +167,20 @@ exports.getInvoice = (req, res, next) => {
 
 			const invoiceName = 'invoice-' + orderId + '.pdf';
 			const invoicePath = path.join('data', 'invoices', invoiceName);
+
+			const pdfDoc = new PDFDocument();
+			res.setHeader('Content-Type', 'application/pdf'); // Set the content type to PDF and make the browser open it
+			res.setHeader(
+				'Content-Disposition',
+				'inline; filename="' + invoiceName + '"' // Set the content disposition to inline and set the filename to download
+			);
+			pdfDoc.pipe(fs.createWriteStream(invoicePath)); // Create a write stream to the invoice path
+			pdfDoc.pipe(res); // Pipe the PDF document to the response
+
+			pdfDoc.text('Invoice');
+
+			pdfDoc.end(); // Finalize the PDF document
+
 			// Reading file to memory and returning it in response
 			// fs.readFile(invoicePath, (err, data) => {
 			// 	if (err) {
@@ -177,15 +193,6 @@ exports.getInvoice = (req, res, next) => {
 			// 	);
 			// 	res.send(data);
 			// });
-
-			// Streaming the file to the response
-			const file = fs.createReadStream(invoicePath);
-			res.setHeader('Content-Type', 'application/pdf'); // Set the content type to PDF and make the browser open it
-			res.setHeader(
-				'Content-Disposition',
-				'inline; filename="' + invoiceName + '"' // Set the content disposition to inline and set the filename to download
-			);
-			file.pipe(res); // Pipe the file stream to the response
 		})
 		.catch((err) => {
 			const error = new Error(err);
