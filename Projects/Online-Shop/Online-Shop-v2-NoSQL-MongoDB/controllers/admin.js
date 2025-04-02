@@ -67,7 +67,7 @@ exports.postAddProduct = (req, res, next) => {
 			validationErrors: errors.array(),
 		});
 	}
-	const imageUrl = image.path; // Use the path of the uploaded file
+	const imageUrl = '/' + image.path; // Use the path of the uploaded file
 	const product = new Product({
 		title: title,
 		price: price,
@@ -163,7 +163,7 @@ exports.postEditProduct = (req, res, next) => {
 			product.price = updatedPrice;
 			product.description = updatedDescription;
 			if (updatedImage) {
-				product.imageUrl = updatedImage.path; // Use the path of the uploaded file
+				product.imageUrl = '/' + updatedImage.path; // Use the path of the uploaded file
 			}
 			return product.save().then((result) => {
 				console.log('UPDATED PRODUCT');

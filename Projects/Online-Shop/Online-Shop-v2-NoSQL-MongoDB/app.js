@@ -54,6 +54,7 @@ app.use(
 	multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 ); //parser for form data
 app.use(express.static(path.join(__dirname, 'public'))); //Grant read access to this folder
+app.use('/images', express.static(path.join(__dirname, 'images'))); //Grant read access to this folder
 //initialize session
 app.use(
 	session({
