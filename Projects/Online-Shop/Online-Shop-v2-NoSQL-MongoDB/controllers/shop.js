@@ -160,10 +160,10 @@ exports.getInvoice = (req, res, next) => {
 		if (err) {
 			return next(err);
 		}
-		res.setHeader('Content-Type', 'application/pdf');
+		res.setHeader('Content-Type', 'application/pdf'); // Set the content type to PDF and make the browser open it
 		res.setHeader(
 			'Content-Disposition',
-			'inline; filename="' + invoiceName + '"'
+			'inline; filename="' + invoiceName + '"' // Set the content disposition to inline and set the filename to download
 		);
 		res.send(data);
 	});
