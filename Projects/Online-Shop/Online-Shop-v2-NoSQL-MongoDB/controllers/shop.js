@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const Product = require('../models/product');
 const Order = require('../models/order');
 
@@ -149,6 +152,22 @@ exports.postOrder = (req, res, next) => {
 		});
 };
 
+exports.getInvoice = (req, res, next) => {
+	const orderId = req.params.orderId;
+	const invoiceName = 'invoice-' + orderId + '.pdf';
+	const invoicePath = path.join('data', 'invoices', invoiceName);
+	fs.readFile(invoicePath, (err, data) => {
+		if (err) {
+			return next(err);
+		}
+		res.setHeader('Content-Type', 'application/pdf');
+		res.setHeader(
+			'Content-Disposition',
+			'inline; filename="' + invoiceName + '"'
+		);
+		res.send(data);
+	});
+};
 // exports.getCheckout = (req, res, next) => {
 // 	res.render('shop/checkout', {
 // 		pageTitle: 'Checkout',
