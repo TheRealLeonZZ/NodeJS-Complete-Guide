@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const stripe = require('stripe')(
+	'sk_test_51RAdJrIMdqYsfTigTw2OYPLka87DtTdioueIIdK7SMwnd4numJbsdhRIo42WU6DlrW1gmzGsTEme8LnWDqUNZ68X00Vsm9z7zZ'
+);
 
 const PDFDocument = require('pdfkit');
 
@@ -144,6 +147,55 @@ exports.postCartDeleteProduct = (req, res, next) => {
 		});
 };
 
+exports.getCheckout = (req, res, next) => {
+	let cartProducts;
+	let totalPrice = 0;
+	req.user
+		.populate('cart.items.productId')
+		.then((user) => {
+			cartProducts = user.cart.items;
+			totalPrice = 0;
+			cartProducts.forEach((p) => {
+				totalPrice += p.quantity * p.productId.price;
+			});
+
+			return stripe.checkout.sessions.create({
+				payment_method_types: ['card'],
+				line_items: cartProducts.map((p) => {
+					return {
+						price_data: {
+							currency: 'usd',
+							product_data: {
+								name: p.productId.title,
+								description: p.productId.description,
+							},
+							unit_amount: p.productId.price * 100, // Stripe expects amount in cents
+						},
+						quantity: p.quantity,
+					};
+				}),
+				mode: 'payment',
+				success_url:
+					req.protocol + '://' + req.get('host') + '/checkout/success',
+				cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel',
+			});
+		})
+		.then((session) => {
+			res.render('shop/checkout', {
+				pageTitle: 'Checkout Page',
+				path: '/checkout',
+				products: cartProducts,
+				totalPrice: totalPrice,
+				sessionId: session.id,
+			});
+		})
+		.catch((err) => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error); // Pass the error to the next middleware
+		});
+};
+
 exports.getOrders = (req, res, next) => {
 	Order.find({ 'user.userId': req.user._id })
 		.then((orders) => {
@@ -152,6 +204,34 @@ exports.getOrders = (req, res, next) => {
 				path: '/orders',
 				orders: orders,
 			});
+		})
+		.catch((err) => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error); // Pass the error // Pass the error to the next middleware to the next middleware
+		});
+};
+
+exports.getCheckoutSuccess = (req, res, next) => {
+	req.user
+		.populate('cart.items.productId')
+		.then((user) => {
+			const cartProducts = user.cart.items.map((i) => {
+				return { quantity: i.quantity, product: { ...i.productId._doc } };
+			});
+			const order = new Order({
+				user: {
+					userId: req.user,
+				},
+				products: cartProducts,
+			});
+			return order.save();
+		})
+		.then(() => {
+			return req.user.clearCart();
+		})
+		.then(() => {
+			res.redirect('/orders');
 		})
 		.catch((err) => {
 			const error = new Error(err);
