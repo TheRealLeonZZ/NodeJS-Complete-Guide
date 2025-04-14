@@ -1,14 +1,14 @@
 exports.getPosts = (req, res, next) => {
 	const posts = [
 		{
-			id: 'p1',
+			_id: '1',
 			title: 'First Post',
 			content: 'This is the first post!',
-		},
-		{
-			id: 'p2',
-			title: 'Second Post',
-			content: 'This is the second post!',
+			imageURL: 'images/carmelibi.png',
+			creator: {
+				name: 'LeonZZ',
+			},
+			createdAt: new Date(),
 		},
 	];
 	res.status(200).json({
