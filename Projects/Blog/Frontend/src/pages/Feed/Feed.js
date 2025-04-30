@@ -50,7 +50,7 @@ class Feed extends Component {
 			page--;
 			this.setState({ postPage: page });
 		}
-		fetch('http://localhost:8080/feed/posts?page=' + page)
+		fetch('http://ubup542:8080/feed/posts?page=' + page)
 			.then((res) => {
 				if (res.status !== 200) {
 					throw new Error('Failed to fetch posts.');
@@ -115,10 +115,10 @@ class Feed extends Component {
 		formData.append('title', postData.title);
 		formData.append('content', postData.content);
 		formData.append('image', postData.image);
-		let url = 'http://localhost:8080/feed/post';
+		let url = 'http://ubup542:8080/feed/post';
 		let method = 'POST';
 		if (this.state.editPost) {
-			url = 'http://localhost:8080/feed/post/' + this.state.editPost._id;
+			url = 'http://ubup542:8080/feed/post/' + this.state.editPost._id;
 			method = 'PUT';
 		}
 
@@ -175,7 +175,7 @@ class Feed extends Component {
 
 	deletePostHandler = (postId) => {
 		this.setState({ postsLoading: true });
-		fetch('http://localhost:8080/feed/post/' + postId, {
+		fetch('http://ubup542:8080/feed/post/' + postId, {
 			method: 'DELETE',
 		})
 			.then((res) => {
