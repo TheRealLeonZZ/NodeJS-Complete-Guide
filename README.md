@@ -48,6 +48,7 @@ This project takes everything from the Shop backend and shifts to a **RESTful AP
 - 📡 Fetching data from a frontend (React)
 - 🛂 Token-based authentication with **JWT**
 - 👤 User and Post models & their relationships
+- ⏱️ Async/Await for cleaner asynchronous code
 
 ---
 
