@@ -82,7 +82,16 @@ class Feed extends Component {
 
 	statusUpdateHandler = (event) => {
 		event.preventDefault();
-		fetch('URL')
+		fetch('http://ubup542:8080/feed/status', {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + this.props.token,
+			},
+			method: 'PUT',
+			body: JSON.stringify({
+				status: this.state.status,
+			}),
+		})
 			.then((res) => {
 				if (res.status !== 200 && res.status !== 201) {
 					throw new Error("Can't update status!");
