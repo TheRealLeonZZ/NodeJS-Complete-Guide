@@ -46,7 +46,7 @@ class Feed extends Component {
 			} else if (data.action === 'update') {
 				this.updatePost(data.post);
 			} else if (data.action === 'delete') {
-				this.deletePost(data.postId);
+				this.loadPosts();
 			}
 		});
 	}
@@ -241,10 +241,11 @@ class Feed extends Component {
 			})
 			.then((resData) => {
 				console.log(resData);
-				this.setState((prevState) => {
-					const updatedPosts = prevState.posts.filter((p) => p._id !== postId);
-					return { posts: updatedPosts, postsLoading: false };
-				});
+				this.loadPosts();
+				// this.setState((prevState) => {
+				// 	const updatedPosts = prevState.posts.filter((p) => p._id !== postId);
+				// 	return { posts: updatedPosts, postsLoading: false };
+				// });
 			})
 			.catch((err) => {
 				console.log(err);
