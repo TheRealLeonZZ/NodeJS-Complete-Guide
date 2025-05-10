@@ -70,7 +70,7 @@ exports.createPost = async (req, res, next) => {
 		// Emit the post creation event to all connected clients
 		io.getIO().emit('posts', {
 			action: 'create',
-			post: post,
+			post: { ...post._doc, creator: { _id: req.userId, name: creator.name } },
 		});
 		res.status(201).json({
 			message: 'Post created successfully!',
