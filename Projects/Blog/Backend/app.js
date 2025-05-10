@@ -3,6 +3,7 @@ require('dotenv').config();
 const path = require('path');
 
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
@@ -33,6 +34,7 @@ const fileFilter = (req, file, cb) => {
 	}
 };
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
 	multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
@@ -66,7 +68,16 @@ app.use((error, req, res, next) => {
 mongoose
 	.connect(process.env.MONGO_URI)
 	.then(() => {
-		app.listen(8080);
+		const server = app.listen(8080);
+		const io = require('socket.io')(server, {
+			cors: {
+				origin: 'http://ubup542:3000',
+				methods: ['GET', 'POST'],
+			},
+		});
+		io.on('connection', (socket) => {
+			console.log('client connected');
+		});
 	})
 	.catch((err) => {
 		console.log(err);
