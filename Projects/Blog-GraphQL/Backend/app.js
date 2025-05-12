@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const { createHandler } = require('graphql-http/lib/use/express');
+const expressPlayground =
+	require('graphql-playground-middleware-express').default;
 
 const graphQlSchema = require('./graphql/schema');
 const graphQlResolver = require('./graphql/resolvers');
@@ -59,6 +61,7 @@ app.use(
 		rootValue: graphQlResolver,
 	})
 );
+app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
 
 app.use((error, req, res, next) => {
 	console.log(error);
