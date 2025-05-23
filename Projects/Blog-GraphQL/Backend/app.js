@@ -59,6 +59,15 @@ app.use(
 	createHandler({
 		schema: graphQlSchema,
 		rootValue: graphQlResolver,
+		formatError(err) {
+			if (!err.originalError) {
+				return err;
+			}
+			const message = err.message || 'An error occurred.';
+			const code = err.originalError.code || 500;
+			const data = err.originalError.data || [];
+			return { message: message, status: code, data: data };
+		},
 	})
 );
 app.get('/playground', expressPlayground({ endpoint: '/graphql' }));
