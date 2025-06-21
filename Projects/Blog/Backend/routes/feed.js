@@ -40,7 +40,6 @@ router.put(
 	feedController.updatePost
 );
 router.delete('/post/:postId', isAuth, feedController.deletePost);
-router.get('/status', isAuth, feedController.getStatus);
 router.put(
 	'/status',
 	isAuth,

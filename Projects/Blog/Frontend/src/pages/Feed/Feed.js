@@ -22,7 +22,7 @@ class Feed extends Component {
 	};
 
 	componentDidMount() {
-		fetch('http://ubup542:8080/feed/status', {
+		fetch('http://ubup542:8080/auth/status', {
 			headers: {
 				Authorization: 'Bearer ' + this.props.token,
 			},
