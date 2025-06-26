@@ -51,6 +51,8 @@ This project takes everything from the Shop backend and shifts to a **RESTful AP
 - ⏱️ Async/Await for cleaner asynchronous code
 - 🔌 Real-time communication with WebSockets and Socket.io
 - 🔍 Building flexible APIs with GraphQL
+- 🚀 App Deployment – Learned how to deploy the app and run it in a production environment
+- 🧪 Testing with Mocha & Chai – Wrote unit tests to ensure code quality and reliability
 
 ---
 
