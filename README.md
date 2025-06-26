@@ -2,6 +2,7 @@
 
 Welcome to my Node.js journey! 🌱  
 This repo contains two major projects I built to dive deep into backend development: **Shop** and **Blog**. Each taught me important concepts that I’ve documented here so I can revisit and refresh my knowledge whenever needed.
+Both projects are built using **Express.js** as the core web framework. 🚂
 
 ---
 
