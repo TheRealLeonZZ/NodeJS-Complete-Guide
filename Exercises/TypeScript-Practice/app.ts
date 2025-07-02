@@ -2,8 +2,8 @@ const num1Input = document.getElementById('num1') as HTMLInputElement;
 const num2Input = document.getElementById('num2') as HTMLInputElement;
 const button = document.querySelector('button')!;
 
-const numResults: number[] = [];
-const textResults: string[] = [];
+const numResults: Array<number> = [];
+const textResults: Array<string> = [];
 
 type NumOrString = number | string;
 type Result = { val: NumOrString; timestamp: Date };
@@ -35,4 +35,13 @@ button.addEventListener('click', () => {
 	textResults.push(stringResult as string);
 	printResult({ val: result as number, timestamp: new Date() });
 	console.log(numResults, textResults);
+});
+
+const myPromise = new Promise<string>((resolve, reject) => {
+	setTimeout(() => {
+		resolve('It worked!');
+	}, 2000);
+});
+myPromise.then((result) => {
+	console.log(result.split(' '));
 });
